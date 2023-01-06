@@ -1,0 +1,6 @@
+__pycache__/
+.vscode/
+example*
+*test*
+private_properties.py
+obslua.lua
