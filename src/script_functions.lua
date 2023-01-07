@@ -8,8 +8,8 @@ function script_properties()
     local properties = obs.obs_properties_create()
     local generate_scenes_button = obs.obs_properties_add_button(
         properties, "generate_scenes_button", "Generate Scenes", generate_scenes)
-    local testb = obs.obs_properties_add_button(
-        properties, "test", "test", test)
+        local generate_stream_scenes_button = obs.obs_properties_add_button(
+            properties, "generate_stream_scenes_button", "Generate Stream Scenes", generate_stream_scenes)
     return properties
 end
 
