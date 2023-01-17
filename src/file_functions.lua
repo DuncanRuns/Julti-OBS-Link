@@ -23,3 +23,11 @@ function get_state_file_string()
     end
     return nil
 end
+
+function get_square_crop_string()
+    local success, result = pcall(read_first_line, julti_dir .. "loadingsquarecrop")
+    if success then
+        return result
+    end
+    return nil
+end
