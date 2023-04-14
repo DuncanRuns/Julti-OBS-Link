@@ -49,9 +49,10 @@ end
 
 function switch_to_scene(scene_name)
     local scene_source = get_source(scene_name)
-    if (scene_source == nil) then return end
+    if (scene_source == nil) then return false end
     obs.obs_frontend_set_current_scene(scene_source)
     release_source(scene_source)
+    return true
 end
 
 function get_video_info()

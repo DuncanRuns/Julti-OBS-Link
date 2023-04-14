@@ -58,7 +58,7 @@ function loop()
 
     local is_on_a_julti_scene = (current_scene_name == "Julti") or (current_scene_name == "Lock Display") or
         (current_scene_name == "Dirt Cover Display") or (current_scene_name == "Walling") or
-        (current_scene_name == "Playing")
+        (current_scene_name == "Playing") or (string.find(current_scene_name, "Playing ") ~= nil)
 
     if not is_on_a_julti_scene then
         return
@@ -81,6 +81,10 @@ function loop()
     for k, data_string in pairs(data_strings) do
         if user_location == nil then
             user_location = data_string
+            -- Prevent wall updates if switching to a single instance scene to allow transitions to work
+            if user_location ~= "W" and switch_to_scene("Playing " .. user_location) then
+                return
+            end
         else
             instance_num = instance_num + 1
             set_instance_data_from_string(instance_num, data_string)
