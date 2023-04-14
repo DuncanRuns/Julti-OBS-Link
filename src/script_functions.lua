@@ -5,12 +5,20 @@ function script_description()
 end
 
 function script_properties()
-    local properties = obs.obs_properties_create()
-    local generate_scenes_button = obs.obs_properties_add_button(
-        properties, "generate_scenes_button", "Generate Scenes", generate_scenes)
-    local generate_stream_scenes_button = obs.obs_properties_add_button(
-        properties, "generate_stream_scenes_button", "Generate Stream Scenes", generate_stream_scenes)
-    return properties
+    local props = obs.obs_properties_create()
+
+    obs.obs_properties_add_bool(props, "win_cap_instead", "Use Window Capture for Julti Scene Sources")
+    obs.obs_properties_add_bool(props, "reuse_for_verification",
+        "Reuse Julti Scene Sources for Verification Scene\n(Better for source record or window cap)")
+
+    obs.obs_properties_add_button(
+        props, "generate_scenes_button", "Generate Scenes", generate_scenes)
+    obs.obs_properties_add_button(
+        props, "generate_stream_scenes_button", "Generate Stream Scenes", generate_stream_scenes)
+
+    obs.obs_properties_add_bool(props, "invisible_dirt_covers", "Invisible Dirt Covers")
+
+    return props
 end
 
 function script_load(settings)
@@ -24,6 +32,10 @@ function script_load(settings)
 end
 
 function script_update(settings)
+    win_cap_instead = obs.obs_data_get_bool(settings, "win_cap_instead")
+    reuse_for_verification = obs.obs_data_get_bool(settings, "reuse_for_verification")
+    invisible_dirt_covers = obs.obs_data_get_bool(settings, "invisible_dirt_covers")
+
     if timers_activated then
         return
     end

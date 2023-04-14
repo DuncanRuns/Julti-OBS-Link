@@ -1,7 +1,14 @@
 obs = obslua
 
-function set_instance_data(num, lock_visible, cover_visible, x, y, width, height)
+function set_instance_data(num, lock_visible, dirt_cover, x, y, width, height)
     local group = get_group_as_scene("Instance " .. num)
+
+    if invisible_dirt_covers and dirt_cover then
+        local scene = get_scene("Julti")
+        local item = obs.obs_scene_find_source(scene, "Instance " .. num)
+        set_position(item, total_width + 1000, 0)
+        return
+    end
 
     -- Lock Display: visibility and crop
     local item = obs.obs_scene_find_source(group, "Lock Display")
@@ -10,7 +17,7 @@ function set_instance_data(num, lock_visible, cover_visible, x, y, width, height
 
     -- Dirt Cover: visibility and bounds
     local item = obs.obs_scene_find_source(group, "Dirt Cover Display")
-    obs.obs_sceneitem_set_visible(item, cover_visible)
+    obs.obs_sceneitem_set_visible(item, dirt_cover)
     set_position_with_bounds(item, 0, 0, width, height)
 
     -- Minecraft capture: position and bounds
@@ -28,11 +35,11 @@ function set_instance_data_from_string(instance_num, data_string)
     -- Example: "2,0,0,960,540"
     local nums = split_string(data_string, ",")
     set_instance_data(
-        instance_num, --instance number
+        instance_num,                         --instance number
         (nums[1] == "1") or (nums[1] == "3"), -- lock visible
         (nums[1] == "2") or (nums[1] == "3"), -- cover visible
-        tonumber(nums[2]), -- x
-        tonumber(nums[3]), -- y
-        tonumber(nums[4]), -- width
-        tonumber(nums[5])) -- height
+        tonumber(nums[2]),                    -- x
+        tonumber(nums[3]),                    -- y
+        tonumber(nums[4]),                    -- width
+        tonumber(nums[5]))                    -- height
 end

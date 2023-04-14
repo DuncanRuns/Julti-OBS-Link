@@ -56,9 +56,12 @@ function generate_scenes()
         found_ae = true
     end
 
-    _setup_verification_scene()
+    _clear_verification_scene()
 
     _setup_julti_scene()
+
+    _setup_verification_scene()
+
 
     -- Reset variables to have loop update stuff automatically
     last_state_text = ""
@@ -79,6 +82,28 @@ function generate_scenes()
     end
 end
 
+function _clear_verification_scene()
+    if scene_exists("Verification") then
+        obs.script_log(200, "------------------------------")
+        obs.script_log(200, "Verification scene already existed,")
+        obs.script_log(200, "captures and sound group will be replaced.")
+        local scene = get_scene("Verification")
+        local items = obs.obs_scene_enum_items(scene)
+        for _, item in ipairs(items) do
+            local name = get_sceneitem_name(item)
+            if name == "Minecraft Audio" or
+                (string.find(name, "Verification Capture ") ~= nil) or
+                (string.find(name, "Minecraft Capture ") ~= nil) or
+                (string.find(name, "Square ") ~= nil) then
+                obs.obs_sceneitem_remove(item)
+            end
+        end
+        obs.sceneitem_list_release(items)
+    else
+        create_scene("Verification")
+    end
+end
+
 function _setup_cover_scene()
     create_scene("Dirt Cover Display")
     local scene = get_scene("Dirt Cover Display")
@@ -95,25 +120,6 @@ function _setup_cover_scene()
 end
 
 function _setup_verification_scene()
-    if scene_exists("Verification") then
-        obs.script_log(200, "------------------------------")
-        obs.script_log(200, "Verification scene already existed,")
-        obs.script_log(200, "window captures and sound group will be replaced.")
-        local scene = get_scene("Verification")
-        local items = obs.obs_scene_enum_items(scene)
-        for _, item in ipairs(items) do
-            local name = get_sceneitem_name(item)
-            if name == "Minecraft Audio" or
-                (string.find(name, "Verification Capture ") ~= nil) or
-                (string.find(name, "Square ") ~= nil) then
-                obs.obs_sceneitem_remove(item)
-            end
-        end
-        obs.sceneitem_list_release(items)
-    else
-        create_scene("Verification")
-    end
-
     local scene = get_scene("Verification")
 
     local out = get_state_file_string()
@@ -172,10 +178,17 @@ function _setup_verification_scene()
         local row = math.floor(instance_index / total_columns)
         local col = math.floor(instance_index % total_columns)
 
-        local settings = obs.obs_data_create_from_json('{"priority": 1, "window": "Minecraft* - Instance ' ..
-            instance_num .. ':GLFW30:javaw.exe"}')
-        local verif_cap_source = obs.obs_source_create("window_capture", "Verification Capture " .. instance_num,
-            settings, nil)
+        local verif_cap_source = nil
+
+        if reuse_for_verification then
+            verif_cap_source = get_source("Minecraft Capture " .. instance_num)
+        else
+            local settings = obs.obs_data_create_from_json('{"priority": 1, "window": "Minecraft* - Instance ' ..
+                instance_num .. ':GLFW30:javaw.exe"}')
+            verif_cap_source = obs.obs_source_create("window_capture", "Verification Capture " .. instance_num,
+                settings, nil)
+        end
+
         local verif_item = obs.obs_scene_add(scene, verif_cap_source)
         set_position_with_bounds(verif_item, col * i_width, row * i_height, i_width - i_height, i_height)
 
@@ -352,10 +365,20 @@ function make_minecraft_group(num, total_width, total_height, y, i_height)
     obs.obs_sceneitem_group_add_item(group_si, obs.obs_scene_add(scene, source))
     release_source(source)
 
-    local settings = obs.obs_data_create_from_json(
-        '{"capture_mode": "window","priority": 1,"window": "Minecraft* - Instance '
-        .. num .. ':GLFW30:javaw.exe"}')
-    local source = obs.obs_source_create("game_capture", "Minecraft Capture " .. num, settings, nil)
+    local settings = nil
+    local source = nil
+
+    if win_cap_instead then
+        settings = obs.obs_data_create_from_json('{"priority": 1, "window": "Minecraft* - Instance ' ..
+            num .. ':GLFW30:javaw.exe"}')
+        source = obs.obs_source_create("window_capture", "Minecraft Capture " .. num, settings, nil)
+    else
+        settings = obs.obs_data_create_from_json(
+            '{"capture_mode": "window","priority": 1,"window": "Minecraft* - Instance '
+            .. num .. ':GLFW30:javaw.exe"}')
+        source = obs.obs_source_create("game_capture", "Minecraft Capture " .. num, settings, nil)
+    end
+
     obs.obs_data_release(settings)
     local mcsi = obs.obs_scene_add(scene, source)
     obs.obs_sceneitem_group_add_item(group_si, mcsi)
