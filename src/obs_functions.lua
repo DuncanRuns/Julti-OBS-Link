@@ -61,19 +61,31 @@ function get_video_info()
     return video_info
 end
 
-function set_position_with_bounds(scene_item, x, y, width, height)
+function set_position_with_bounds(scene_item, x, y, width, height, center_align)
+    center_align = center_align or false
+
     local bounds = obs.vec2()
     bounds.x = width
     bounds.y = height
-    obs.obs_sceneitem_set_bounds_type(scene_item, obs.OBS_BOUNDS_STRETCH)
-    set_position(scene_item, x, y)
-    obs.obs_sceneitem_set_bounds(scene_item, bounds)
+
+    if center_align then
+        obs.obs_sceneitem_set_bounds_type(scene_item, obs.OBS_BOUNDS_NONE)
+    else
+        obs.obs_sceneitem_set_bounds_type(scene_item, obs.OBS_BOUNDS_STRETCH)
+        obs.obs_sceneitem_set_bounds(scene_item, bounds)
+    end
+
+    set_position(scene_item, x, y, center_align)
 end
 
-function set_position(scene_item, x, y)
+function set_position(scene_item, x, y, center_align)
+    center_align = center_align or false
+
+    obs.obs_sceneitem_set_alignment(scene_item, center_align and 0 or 5)
+
     local pos = obs.vec2()
-    pos.x = x
-    pos.y = y
+    pos.x = x + (center_align and total_width / 2 or 0)
+    pos.y = y + (center_align and total_height / 2 or 0)
     obs.obs_sceneitem_set_pos(scene_item, pos)
 end
 

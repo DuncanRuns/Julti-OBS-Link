@@ -17,6 +17,8 @@ function script_properties()
         props, "generate_stream_scenes_button", "Generate Stream Scenes", generate_stream_scenes)
 
     obs.obs_properties_add_bool(props, "invisible_dirt_covers", "Invisible Dirt Covers")
+    obs.obs_properties_add_bool(props, "center_align_instances",
+        "Align instances to center\n(for EyeZoom/stretched window users)")
 
     return props
 end
@@ -34,6 +36,7 @@ end
 function script_update(settings)
     win_cap_instead = obs.obs_data_get_bool(settings, "win_cap_instead")
     reuse_for_verification = obs.obs_data_get_bool(settings, "reuse_for_verification")
+    center_align_instances = obs.obs_data_get_bool(settings, "center_align_instances")
     invisible_dirt_covers = obs.obs_data_get_bool(settings, "invisible_dirt_covers")
 
     if timers_activated then
@@ -113,7 +116,19 @@ function loop()
     if user_location ~= "W" then
         local scene = get_scene("Julti")
         bring_to_top(obs.obs_scene_find_source(scene, "Instance " .. user_location))
-        set_instance_data(tonumber(user_location), false, false, 0, 0, total_width, total_height)
+        set_instance_data(tonumber(user_location), false, false, 0, 0, total_width, total_height, center_align_instances)
+        
+        -- hide bordering instances
+        if not center_align_instances then
+            return
+        end
+        for k, data_string in pairs(data_strings) do
+            if k == tonumber(user_location) then
+                goto continue
+            end
+            invisible_cover(k)
+            ::continue::
+        end
     end
 end
 

@@ -211,8 +211,8 @@ function _setup_verification_scene()
         obs.obs_sceneitem_set_visible(filler_item, false)
 
         local verif_item_2 = obs.obs_scene_add(square_group_scene, verif_cap_source)
-        obs.obs_sceneitem_set_alignment(verif_item_2, 9)
         set_position(verif_item_2, 0, 10000)
+        obs.obs_sceneitem_set_alignment(verif_item_2, 9)
 
         set_crop(square_group_item, 0, 10000 - square_height, 10000 - square_width, 0)
         set_position_with_bounds(square_group_item, col * i_width + (i_width - i_height), row * i_height, i_height,
@@ -254,7 +254,9 @@ function _setup_lock_scene()
     -- intuitively the scene item returned from add group would need to be released, but it does not
     obs.obs_scene_add_group(scene, "Example Instances")
     local group = get_group_as_scene("Example Instances")
-    obs.obs_sceneitem_set_locked(obs.obs_scene_find_source(scene, "Example Instances"), true)
+    local group_source = obs.obs_scene_find_source(scene, "Example Instances")
+    obs.obs_sceneitem_set_locked(group_source, true)
+    obs.obs_sceneitem_set_visible(group_source, false)
 
     -- Blacksmith Example
     local blacksmith_data = obs.obs_data_create_from_json('{"file":"' ..
@@ -391,6 +393,6 @@ function make_minecraft_group(num, total_width, total_height, y, i_height)
     local mcsi = obs.obs_scene_add(scene, source)
     obs.obs_sceneitem_group_add_item(group_si, mcsi)
     set_position_with_bounds(mcsi, 0, 0, total_width, total_height)
-    set_instance_data(num, false, false, 0, y, total_width, i_height)
+    set_instance_data(num, false, false, 0, y, total_width, i_height, center_align_instances)
     release_source(source)
 end
