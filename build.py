@@ -24,7 +24,7 @@ def build(out_file: io.TextIOWrapper) -> None:
 
 
 def get_src_file_string(name: str) -> str:
-    out = "-- " + get_display_name(name) + " --"
+    out = f"---- {get_display_name(name)} ----"
     with open("src/" + name, "r") as src_file:
         out += "\n\n" + get_actual_code(src_file.read()) + "\n\n"
     return out
