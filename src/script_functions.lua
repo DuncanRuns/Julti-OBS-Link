@@ -18,7 +18,7 @@ function script_properties()
 
     obs.obs_properties_add_bool(props, "invisible_dirt_covers", "Invisible Dirt Covers")
     obs.obs_properties_add_bool(props, "center_align_instances",
-        "Align instances to center\n(for EyeZoom/stretched window users)")
+        "Align Active Instance to Center\n(for EyeZoom/stretched window users)")
 
     return props
 end
@@ -117,7 +117,7 @@ function loop()
         local scene = get_scene("Julti")
         bring_to_top(obs.obs_scene_find_source(scene, "Instance " .. user_location))
         set_instance_data(tonumber(user_location), false, false, 0, 0, total_width, total_height, center_align_instances)
-        
+
         -- hide bordering instances
         if not center_align_instances then
             return
@@ -126,7 +126,7 @@ function loop()
             if k == tonumber(user_location) then
                 goto continue
             end
-            invisible_cover(k)
+            teleport_off_canvas(k)
             ::continue::
         end
     end

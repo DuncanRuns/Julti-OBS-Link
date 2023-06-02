@@ -393,6 +393,6 @@ function make_minecraft_group(num, total_width, total_height, y, i_height)
     local mcsi = obs.obs_scene_add(scene, source)
     obs.obs_sceneitem_group_add_item(group_si, mcsi)
     set_position_with_bounds(mcsi, 0, 0, total_width, total_height)
-    set_instance_data(num, false, false, 0, y, total_width, i_height, center_align_instances)
+    set_instance_data(num, false, false, 0, y, total_width, i_height)
     release_source(source)
 end

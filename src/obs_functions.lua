@@ -62,6 +62,7 @@ function get_video_info()
 end
 
 function set_position_with_bounds(scene_item, x, y, width, height, center_align)
+    -- default value false
     center_align = center_align or false
 
     local bounds = obs.vec2()
@@ -75,17 +76,16 @@ function set_position_with_bounds(scene_item, x, y, width, height, center_align)
         obs.obs_sceneitem_set_bounds(scene_item, bounds)
     end
 
-    set_position(scene_item, x, y, center_align)
+    -- set alignment of the scene item to: center_align ? CENTER : TOP_LEFT
+    obs.obs_sceneitem_set_alignment(scene_item, center_align and 0 or ALIGN_TOP_LEFT)
+
+    set_position(scene_item, x + (center_align and total_width / 2 or 0), y + (center_align and total_height / 2 or 0))
 end
 
-function set_position(scene_item, x, y, center_align)
-    center_align = center_align or false
-
-    obs.obs_sceneitem_set_alignment(scene_item, center_align and 0 or 5)
-
+function set_position(scene_item, x, y)
     local pos = obs.vec2()
-    pos.x = x + (center_align and total_width / 2 or 0)
-    pos.y = y + (center_align and total_height / 2 or 0)
+    pos.x = x
+    pos.y = y
     obs.obs_sceneitem_set_pos(scene_item, pos)
 end
 

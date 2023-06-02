@@ -1,6 +1,6 @@
 obs = obslua
 
-function invisible_cover(num)
+function teleport_off_canvas(num)
     local scene = get_scene("Julti")
     local item = obs.obs_scene_find_source(scene, "Instance " .. num)
     set_position(item, total_width + 1000, 0)
@@ -12,7 +12,7 @@ function set_instance_data(num, lock_visible, dirt_cover, x, y, width, height, c
     local group = get_group_as_scene("Instance " .. num)
 
     if invisible_dirt_covers and dirt_cover then
-        invisible_cover(num)
+        teleport_off_canvas(num)
         return
     end
 

@@ -8,8 +8,13 @@ last_scene_name = ""
 total_width = 0
 total_height = 0
 
--- script settings
+
+-- Script Settings
 win_cap_instead = false
 reuse_for_verification = false
 invisible_dirt_covers = false
 center_align_instances = false
+
+
+-- Constants
+ALIGN_TOP_LEFT = 5 -- equivalent to obs.OBS_ALIGN_TOP | obs.OBS_ALIGN_LEFT
