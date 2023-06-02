@@ -18,3 +18,4 @@ center_align_instances = false
 
 -- Constants
 ALIGN_TOP_LEFT = 5 -- equivalent to obs.OBS_ALIGN_TOP | obs.OBS_ALIGN_LEFT
+ALIGN_CENTER = 0   -- equivalent to obs.OBS_ALIGN_CENTER
