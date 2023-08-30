@@ -5,6 +5,9 @@ timers_activated = false
 last_state_text = ""
 last_scene_name = ""
 
+gen_scenes_requested = false
+gen_stream_scenes_requested = false
+
 total_width = 0
 total_height = 0
 

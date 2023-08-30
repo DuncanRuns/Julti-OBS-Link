@@ -12,9 +12,9 @@ function script_properties()
         "Reuse Julti Scene Sources for Verification Scene\n(Better for source record or window cap)")
 
     obs.obs_properties_add_button(
-        props, "generate_scenes_button", "Generate Scenes", generate_scenes)
+        props, "generate_scenes_button", "Generate Scenes", request_generate_scenes)
     obs.obs_properties_add_button(
-        props, "generate_stream_scenes_button", "Generate Stream Scenes", generate_stream_scenes)
+        props, "generate_stream_scenes_button", "Generate Stream Scenes", request_generate_stream_scenes)
 
     obs.obs_properties_add_bool(props, "invisible_dirt_covers", "Invisible Dirt Covers")
     obs.obs_properties_add_bool(props, "center_align_instances",
@@ -47,6 +47,16 @@ function script_update(settings)
 end
 
 function loop()
+    -- Check Gen Requests
+    if gen_scenes_requested then
+        gen_scenes_requested = false
+        generate_scenes()
+    end
+    if gen_stream_scenes_requested then
+        gen_stream_scenes_requested = false
+        generate_stream_scenes()
+    end
+
     -- Scene Change Check
 
     local current_scene_source = obs.obs_frontend_get_current_scene()

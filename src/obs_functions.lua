@@ -109,3 +109,11 @@ end
 function bring_to_bottom(item)
     obs.obs_sceneitem_set_order(item, obs.OBS_ORDER_MOVE_BOTTOM)
 end
+
+function delete_source(name)
+    local source = get_source(name)
+    if (source ~= nil) then
+        obs.obs_source_remove(source)
+        release_source(source)
+    end
+end
