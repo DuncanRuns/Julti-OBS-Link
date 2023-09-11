@@ -126,7 +126,7 @@ function loop()
     if user_location ~= "W" then
         local scene = get_scene("Julti")
         bring_to_top(obs.obs_scene_find_source(scene, "Instance " .. user_location))
-        set_instance_data(tonumber(user_location), false, false, 0, 0, total_width, total_height, center_align_instances)
+        set_instance_data(tonumber(user_location), false, false, false, 0, 0, total_width, total_height, center_align_instances)
 
         -- hide bordering instances
         if not center_align_instances then
