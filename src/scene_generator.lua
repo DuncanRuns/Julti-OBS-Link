@@ -454,7 +454,7 @@ function make_minecraft_group(num, total_width, total_height, y, i_height)
         source = obs.obs_source_create("game_capture", "Minecraft Capture " .. num, settings, nil)
     end
 
-    S.obs_source_filter_remove(source, S.obs_source_get_filter_by_name(source, "Freeze filter"))
+    obs.obs_source_filter_remove(source, obs.obs_source_get_filter_by_name(source, "Freeze filter"))
 
     obs.obs_data_release(settings)
     local mcsi = obs.obs_scene_add(scene, source)

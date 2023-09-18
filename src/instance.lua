@@ -34,13 +34,13 @@ function set_instance_data(num, lock_visible, dirt_cover, freeze_active, x, y, w
     -- Freeze filter activation for minecraft capture
     local source = obs.obs_sceneitem_get_source(item)
     local filter = obs.obs_source_get_filter_by_name(source, "Freeze filter")
-    if filter == nil then
+    if filter == nil and freeze_active then
         local settings = obs.obs_data_create()
         filter = obs.obs_source_create_private("freeze_filter", "Freeze filter", settings)
         obs.obs_source_filter_add(source, filter)
     end
     if not (filter == nil) then
-        obs.obs_source_set_enabled(filter, freeze_active)
+        obs.obs_source_set_enabled(filter, freeze_active and not lock_visible)
     end
 
     -- Instance Group: position
