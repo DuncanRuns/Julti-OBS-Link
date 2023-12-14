@@ -15,6 +15,16 @@ function generate_stream_scenes()
     if not scene_exists("Playing") then
         create_scene("Playing")
         obs.obs_scene_add(get_scene("Playing"), julti_source)
+        local num_over = get_source("Current Location")
+        if num_over == nil then
+            local settings = obs.obs_data_create_from_json(
+                '{"file":"' .. julti_dir ..
+                'currentlocation.txt","font":{"face":"Arial","flags":0,"size":48,"style":"Regular"},"opacity":15,"read_from_file":true}'
+            )
+            num_over = obs.obs_source_create("text_gdiplus", "Current Location", settings, nil)
+        end
+        obs.obs_scene_add(get_scene("Playing"), num_over)
+        release_source(num_over)
     end
     if not scene_exists("Walling") then
         create_scene("Walling")

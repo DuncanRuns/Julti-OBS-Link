@@ -31,6 +31,16 @@ function gen_overlay_scene()
         return
     end
     create_scene("Playing Overlay")
+    local num_over = get_source("Current Location")
+    if num_over == nil then
+        local settings = obs.obs_data_create_from_json(
+            '{"file":"' .. julti_dir ..
+            'currentlocation.txt","font":{"face":"Arial","flags":0,"size":48,"style":"Regular"},"opacity":15,"read_from_file":true}'
+        )
+        num_over = obs.obs_source_create("text_gdiplus", "Current Location", settings, nil)
+    end
+    obs.obs_scene_add(get_scene("Playing Overlay"), num_over)
+    release_source(num_over)
 end
 
 function generate_multi_playing_scene(i)
