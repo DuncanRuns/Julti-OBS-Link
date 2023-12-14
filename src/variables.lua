@@ -17,6 +17,7 @@ win_cap_instead = false
 reuse_for_verification = false
 invisible_dirt_covers = false
 center_align_instances = false
+show_indicators = false
 
 
 -- Constants

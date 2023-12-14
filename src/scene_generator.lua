@@ -15,16 +15,6 @@ function generate_stream_scenes()
     if not scene_exists("Playing") then
         create_scene("Playing")
         obs.obs_scene_add(get_scene("Playing"), julti_source)
-        local num_over = get_source("Current Location")
-        if num_over == nil then
-            local settings = obs.obs_data_create_from_json(
-                '{"file":"' .. julti_dir ..
-                'currentlocation.txt","font":{"face":"Arial","flags":0,"size":48,"style":"Regular"},"opacity":15,"read_from_file":true}'
-            )
-            num_over = obs.obs_source_create("text_gdiplus", "Current Location", settings, nil)
-        end
-        obs.obs_scene_add(get_scene("Playing"), num_over)
-        release_source(num_over)
     end
     if not scene_exists("Walling") then
         create_scene("Walling")
@@ -101,6 +91,8 @@ function generate_scenes()
     _setup_verification_scene()
 
     regenerate_multi_scenes()
+
+    disable_all_indicators()
 
 
     -- Reset variables to have loop update stuff automatically
@@ -446,8 +438,20 @@ function make_minecraft_group(num, total_width, total_height, y, i_height)
     local group_si = obs.obs_scene_add_group(scene, "Instance " .. num)
 
     local source = get_source("Lock Display")
-    local ldsi = obs.obs_scene_add(scene, source)
-    obs.obs_sceneitem_group_add_item(group_si, ldsi)
+    obs.obs_sceneitem_group_add_item(group_si, obs.obs_scene_add(scene, source))
+    release_source(source)
+
+    local num_overlay_name = "Instance " .. num .. " Indicator"
+    local source = get_source(num_overlay_name)
+    if source == nil then
+        local settings = obs.obs_data_create_from_json(
+            '{"text": "' .. num .. '","font": {"face": "Arial","flags": 0,"size": 48,"style": "Regular"},"opacity": 15}'
+        )
+        source = obs.obs_source_create("text_gdiplus", num_overlay_name, settings, nil)
+    end
+    local indicator_item = obs.obs_scene_add(scene, source)
+    obs.obs_sceneitem_group_add_item(group_si, indicator_item)
+    set_position(indicator_item, 5, 0)
     release_source(source)
 
     local source = get_source("Dirt Cover Display")

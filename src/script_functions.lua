@@ -98,6 +98,7 @@ function loop()
     -- Process state data
 
     local data_strings = split_string(out, ";")
+    local instance_count = (#data_strings) - 2
     local user_location = nil
     local option_bits_unset = true
     local instance_num = 0
@@ -119,7 +120,10 @@ function loop()
         end
     end
 
+    disable_all_indicators()
+
     if user_location == "W" then
+        if show_indicators then enable_indicators(instance_count) end
         if (scene_exists("Walling")) then
             switch_to_scene("Walling")
         else
@@ -135,6 +139,7 @@ function loop()
 
     if user_location ~= "W" then
         local scene = get_scene("Julti")
+        if show_indicators then enable_indicator(user_location) end
         bring_to_top(obs.obs_scene_find_source(scene, "Instance " .. user_location))
         set_instance_data(tonumber(user_location), false, false, false, 0, 0, total_width, total_height,
             center_align_instances)
@@ -154,6 +159,10 @@ function loop()
 end
 
 function set_globals_from_bits(flag_int)
+    show_indicators = flag_int >= 4
+    if show_indicators then
+        flag_int = flag_int - 4
+    end
     center_align_instances = flag_int >= 2
     if center_align_instances then
         flag_int = flag_int - 2
