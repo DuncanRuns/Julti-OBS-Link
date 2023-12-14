@@ -82,11 +82,15 @@ function generate_scenes()
         found_ae = true
     end
 
+    remove_individual_multi_captures()
+
     _ensure_empty_important_scenes()
 
     _setup_julti_scene()
 
     _setup_verification_scene()
+
+    regenerate_multi_scenes()
 
 
     -- Reset variables to have loop update stuff automatically

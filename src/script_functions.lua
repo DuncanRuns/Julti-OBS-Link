@@ -7,14 +7,17 @@ end
 function script_properties()
     local props = obs.obs_properties_create()
 
-    obs.obs_properties_add_bool(props, "win_cap_instead", "Use Window Capture for Julti Scene Sources")
+    obs.obs_properties_add_bool(props, "win_cap_instead",
+        "[Generation Option]\nUse Window Capture for Julti Scene Sources")
     obs.obs_properties_add_bool(props, "reuse_for_verification",
-        "Reuse Julti Scene Sources for Verification Scene\n(Better for source record or window cap)")
+        "[Generation Option]\nReuse Julti Scene Sources for Verification Scene\n(Better for source record or window cap)")
 
     obs.obs_properties_add_button(
         props, "generate_scenes_button", "Generate Scenes", request_generate_scenes)
     obs.obs_properties_add_button(
         props, "generate_stream_scenes_button", "Generate Stream Scenes", request_generate_stream_scenes)
+    obs.obs_properties_add_button(
+        props, "generate_multi_scenes_button", "Generate Multi Scenes (1 scene per instance)", generate_multi_scenes)
 
     obs.obs_properties_add_bool(props, "invisible_dirt_covers", "Invisible Dirt Covers")
     obs.obs_properties_add_bool(props, "center_align_instances",
@@ -126,7 +129,8 @@ function loop()
     if user_location ~= "W" then
         local scene = get_scene("Julti")
         bring_to_top(obs.obs_scene_find_source(scene, "Instance " .. user_location))
-        set_instance_data(tonumber(user_location), false, false, false, 0, 0, total_width, total_height, center_align_instances)
+        set_instance_data(tonumber(user_location), false, false, false, 0, 0, total_width, total_height,
+            center_align_instances)
 
         -- hide bordering instances
         if not center_align_instances then
