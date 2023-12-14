@@ -1,9 +1,14 @@
-import os, io
+import os
+import io
 from properties import *
 
 try:
     import private_properties
     has_private_properties = True
+    try:
+        private_properties.only_do_extra
+    except Exception:
+        private_properties.only_do_extra = False
 except ImportError:
     has_private_properties = False
 
