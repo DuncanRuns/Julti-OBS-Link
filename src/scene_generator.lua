@@ -59,7 +59,7 @@ function generate_scenes()
         obs.script_log(100, "Julti has not yet been set up! Please setup Julti first!")
         return
     end
-    local instance_count = (#(split_string(out, ";"))) - 1
+    local instance_count = (#(split_string(out, ";"))) - 2
 
     if not scene_exists("Lock Display") then
         _setup_lock_scene()
@@ -244,7 +244,7 @@ function _setup_verification_scene()
         obs.script_log(200, "Warning: Could not a loading square size, defaulting to 90x90.")
     end
 
-    local instance_count = (#(split_string(out, ";"))) - 1
+    local instance_count = (#(split_string(out, ";"))) - 2
 
     if instance_count == 0 then
         return
@@ -398,7 +398,7 @@ end
 function _setup_julti_scene()
     local out = get_state_file_string()
 
-    local instance_count = (#(split_string(out, ";"))) - 1
+    local instance_count = (#(split_string(out, ";"))) - 2
 
     if instance_count == 0 then
         obs.script_log(100, "Julti has not yet been set up (No instances found)! Please setup Julti first!")
