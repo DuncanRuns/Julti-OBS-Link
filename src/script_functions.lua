@@ -19,9 +19,10 @@ function script_properties()
     obs.obs_properties_add_button(
         props, "generate_multi_scenes_button", "Generate Multi Scenes (1 scene per instance)", generate_multi_scenes)
 
-    obs.obs_properties_add_bool(props, "invisible_dirt_covers", "Invisible Dirt Covers")
-    obs.obs_properties_add_bool(props, "center_align_instances",
-        "Align Active Instance to Center\n(for EyeZoom/stretched window users)")
+    -- Moved into Julti options
+    -- obs.obs_properties_add_bool(props, "invisible_dirt_covers", "Invisible Dirt Covers")
+    -- obs.obs_properties_add_bool(props, "center_align_instances",
+    --     "Align Active Instance to Center\n(for EyeZoom/stretched window users)")
 
     return props
 end
@@ -98,14 +99,20 @@ function loop()
 
     local data_strings = split_string(out, ";")
     local user_location = nil
+    local option_bits_unset = true
     local instance_num = 0
     for k, data_string in pairs(data_strings) do
         if user_location == nil then
+            -- Should take first item from data_strings
             user_location = data_string
             -- Prevent wall updates if switching to a single instance scene to allow transitions to work
             if user_location ~= "W" and switch_to_scene("Playing " .. user_location) then
                 return
             end
+        elseif option_bits_unset then
+            -- Should take second item from data_strings
+            option_bits_unset = false
+            set_globals_from_bits(tonumber(data_string))
         else
             instance_num = instance_num + 1
             set_instance_data_from_string(instance_num, data_string)
@@ -143,6 +150,17 @@ function loop()
             teleport_off_canvas(k)
             ::continue::
         end
+    end
+end
+
+function set_globals_from_bits(flag_int)
+    center_align_instances = flag_int >= 2
+    if center_align_instances then
+        flag_int = flag_int - 2
+    end
+    invisible_dirt_covers = flag_int >= 1
+    if invisible_dirt_covers then
+        flag_int = flag_int - 1
     end
 end
 
