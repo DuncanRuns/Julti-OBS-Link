@@ -4,3 +4,4 @@ example*
 *test*
 private_properties.py
 obslua.lua
+out/
