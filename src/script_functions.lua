@@ -129,6 +129,7 @@ function loop()
     disable_all_indicators()
 
     if user_location == "W" then
+        bring_to_top(obs.obs_scene_find_source(get_scene("Julti"), "Wall On Top"))
         if show_indicators then enable_indicators(instance_count) end
         if (scene_exists("Walling")) then
             switch_to_scene("Walling")

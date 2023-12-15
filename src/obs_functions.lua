@@ -103,7 +103,9 @@ function get_sceneitem_name(sceneitem)
 end
 
 function bring_to_top(item)
-    obs.obs_sceneitem_set_order(item, obs.OBS_ORDER_MOVE_TOP)
+    if item ~= nil then
+        obs.obs_sceneitem_set_order(item, obs.OBS_ORDER_MOVE_TOP)
+    end
 end
 
 function bring_to_bottom(item)
