@@ -106,7 +106,7 @@ function loop()
     local data_strings = split_string(out, ";")
     local instance_count = (#data_strings) - 2
     local user_location = nil
-    local option_bits_unset = true
+    local global_options_unset = true
     local instance_num = 0
     for k, data_string in pairs(data_strings) do
         if user_location == nil then
@@ -116,10 +116,10 @@ function loop()
             if user_location ~= "W" and switch_to_scene("Playing " .. user_location) then
                 return
             end
-        elseif option_bits_unset then
+        elseif global_options_unset then
             -- Should take second item from data_strings
-            option_bits_unset = false
-            set_globals_from_bits(tonumber(data_string))
+            global_options_unset = false
+            set_globals_from_state(data_string)
         else
             instance_num = instance_num + 1
             set_instance_data_from_string(instance_num, data_string)
@@ -163,6 +163,13 @@ function loop()
             ::continue::
         end
     end
+end
+
+function set_globals_from_state(options_section)
+    local args = split_string(data_string, ",")
+    set_globals_from_bits(tonumber(args[1]))
+    center_align_scale_x = tonumber(args[2]) or 1.0
+    center_align_scale_y = tonumber(args[3]) or 1.0
 end
 
 function set_globals_from_bits(flag_int)

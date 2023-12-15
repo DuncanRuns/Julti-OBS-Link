@@ -17,6 +17,8 @@ win_cap_instead = false
 reuse_for_verification = false
 invisible_dirt_covers = false
 center_align_instances = false
+center_align_scale_x = 1.0
+center_align_scale_y = 1.0
 show_indicators = false
 
 
