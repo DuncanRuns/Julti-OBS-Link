@@ -166,7 +166,7 @@ function loop()
 end
 
 function set_globals_from_state(options_section)
-    local args = split_string(data_string, ",")
+    local args = split_string(options_section, ",")
     set_globals_from_bits(tonumber(args[1]))
     center_align_scale_x = tonumber(args[2]) or 1.0
     center_align_scale_y = tonumber(args[3]) or 1.0
