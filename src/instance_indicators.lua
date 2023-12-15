@@ -23,6 +23,7 @@ function enable_indicators(instance_count)
         if si ~= nil then
             obs.obs_sceneitem_set_visible(si, true)
         end
+        set_position(si, 5, 0)
     end
 end
 
@@ -35,4 +36,5 @@ function enable_indicator(num)
     if si ~= nil then
         obs.obs_sceneitem_set_visible(si, true)
     end
+    set_position(si, 5, 0)
 end
