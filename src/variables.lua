@@ -2,6 +2,7 @@ obs = obslua
 
 julti_dir = os.getenv("UserProfile"):gsub("\\", "/") .. "/.Julti/"
 timers_activated = false
+scenes_regenerated = true
 last_state_text = ""
 last_scene_name = ""
 

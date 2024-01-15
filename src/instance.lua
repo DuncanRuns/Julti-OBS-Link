@@ -10,6 +10,11 @@ function set_instance_data(num, lock_visible, dirt_cover, freeze_active, x, y, w
     center_align = center_align or false
 
     local group = get_group_as_scene("Instance " .. num)
+    
+    if group == nil and scenes_regenerated then
+        scenes_regenerated = false
+        obs.script_log(200, "Detected newly added instances! Please go to Tools > Scripts > Generate Scenes to add them to OBS.")
+    end
 
     if invisible_dirt_covers and dirt_cover then
         teleport_off_canvas(num)
