@@ -28,11 +28,7 @@ function script_properties()
 end
 
 function script_load(settings)
-    local video_info = get_video_info()
-    total_width = video_info.base_width
-    total_height = video_info.base_height
-
-    pcall(write_file, julti_dir .. "obsscenesize", total_width .. "," .. total_height)
+    update_scene_size(true)
 
     switch_to_scene("Julti")
 end
@@ -40,14 +36,28 @@ end
 function script_update(settings)
     win_cap_instead = obs.obs_data_get_bool(settings, "win_cap_instead")
     reuse_for_verification = obs.obs_data_get_bool(settings, "reuse_for_verification")
-    center_align_instances = obs.obs_data_get_bool(settings, "center_align_instances")
-    invisible_dirt_covers = obs.obs_data_get_bool(settings, "invisible_dirt_covers")
 
     if timers_activated then
         return
     end
     timers_activated = true
     obs.timer_add(loop, 20)
+    obs.timer_add(update_scene_size, 2000)
+end
+
+function update_scene_size(skipLog)
+    local video_info = get_video_info()
+
+    if total_width ~= video_info.base_width or total_height ~= video_info.base_height then
+        total_width = video_info.base_width
+        total_height = video_info.base_height
+
+        pcall(write_file, julti_dir .. "obsscenesize", total_width .. "," .. total_height)
+
+        if not skipLog then
+            obs.script_log(200, "Detected a change in OBS canvas resolution! If Julti is currently running, please restart it to fix scene sizes.")
+        end
+    end
 end
 
 function loop()
