@@ -5,6 +5,7 @@ timers_activated = false
 scenes_regenerated = true
 last_state_text = ""
 last_scene_name = ""
+instance_order = ""
 
 gen_scenes_requested = false
 gen_stream_scenes_requested = false

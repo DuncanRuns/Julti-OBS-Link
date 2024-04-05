@@ -139,6 +139,7 @@ function loop()
     disable_all_indicators()
 
     if user_location == "W" then
+        rearrange_instances()
         bring_to_top(obs.obs_scene_find_source(get_scene("Julti"), "Wall On Top"))
         if show_indicators then enable_indicators(instance_count) end
         if (scene_exists("Walling")) then
@@ -180,6 +181,9 @@ function set_globals_from_state(options_section)
     set_globals_from_bits(tonumber(args[1]))
     center_align_scale_x = tonumber(args[2]) or 1.0
     center_align_scale_y = tonumber(args[3]) or 1.0
+    if #args > 3 then
+        instance_order = args[4]
+    end
 end
 
 function set_globals_from_bits(flag_int)
@@ -222,4 +226,11 @@ function hide_example_instances()
     local scene = get_scene("Lock Display")
     local item = obs.obs_scene_find_source(scene, "Example Instances")
     obs.obs_sceneitem_set_visible(item, false)
+end
+
+function rearrange_instances()
+    local order = split_string(instance_order, "-")
+    for i = #order, 1, -1 do
+        bring_to_top(obs.obs_scene_find_source(get_scene("Julti"), "Instance " .. order[i]))
+    end
 end
