@@ -55,7 +55,8 @@ function update_scene_size(skipLog)
         pcall(write_file, julti_dir .. "obsscenesize", total_width .. "," .. total_height)
 
         if not skipLog then
-            obs.script_log(200, "Detected a change in OBS canvas resolution! If Julti is currently running, please restart it to fix scene sizes.")
+            obs.script_log(200,
+                "Detected a change in OBS canvas resolution! If Julti is currently running, please restart it to fix scene sizes.")
         end
     end
 end

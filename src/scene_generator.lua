@@ -112,7 +112,7 @@ function generate_scenes()
         obs.script_log(200, "If you want to recreate these scenes,")
         obs.script_log(200, "delete them first before pressing Generate Scenes.")
     end
-    
+
     scenes_regenerated = true
 end
 
