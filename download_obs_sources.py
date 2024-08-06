@@ -24,8 +24,6 @@ def try_download():
 def main():
     if os.path.exists("obslua.lua"):
         shutil.copy("obslua.lua", "obslua.lua.backup")
-    import time
-    time.sleep(10)
 
     if not try_download():
         shutil.copy("obslua.lua.backup", "obslua.lua")
